@@ -1,0 +1,10 @@
+{
+  "name": "Teams",
+  "version": "1.0.0",
+  "title": "MultiplayerTeams for Factorio",
+  "author": "KaleR",
+  "contact": "mail@schaefti.de",
+  "homepage": "https://github.com/schaeftide/factorio-teams",
+  "factorio_version": "0.13",
+  "description": "with this mod, you can create Teams on start up"
+}
