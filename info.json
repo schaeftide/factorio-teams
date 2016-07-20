@@ -1,10 +1,10 @@
 {
   "name": "Teams",
-  "version": "1.0.1",
-  "title": "MultiplayerTeams for Factorio",
+  "version": "1.0.2",
+  "title": "easy Teams",
   "author": "KaleR",
   "contact": "mail@schaefti.de",
-  "homepage": "https://github.com/schaeftide/factorio-teams",
+  "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=29465",
   "factorio_version": "0.13",
-  "description": "with this mod, you can create Teams on start up"
+  "description": "Create easily Teams on the fly and challenge each other. You could configure every thing on startup"
 }
