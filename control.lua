@@ -147,6 +147,7 @@ function make_team_option(player)
         table.each(global.forcesData, function(data)
             frame.add { type = "button", caption = { 'teams.team-join', data.title }, name = 'choose_team_' .. data.name }.style.font_color = data.color
         end)
+        frame.add { type = "button", caption = { "teams.team-auto-assign"}, name = "autoAssign" }
         frame.add { type = "button", caption = { "teams.team-check-number" }, name = "team_number_check" }.style.font_color = { r = 0.9, g = 0.9, b = 0.9 }
     end
 end
@@ -245,6 +246,53 @@ function triggerTeamsEnabling()
     register_tick_helper_if_valid('CREATE_TEAMS', tick_helper, tick_interval, if_valid);
 end
 
+function putPlayerInTeam(player, forceData)
+    local s = game.surfaces.nauvis;
+    player.teleport(game.forces[forceData.cName].get_spawn_position(s), s)
+    player.color = forceData.color
+    player.force = game.forces[forceData.cName]
+    player.gui.left.choose_team.destroy()
+    player.insert { name = "iron-plate", count = 8 }
+    player.insert { name = "pistol", count = 1 }
+    player.insert { name = "firearm-magazine", count = 10 }
+    player.insert { name = "burner-mining-drill", count = 1 }
+    player.insert { name = "stone-furnace", count = 1 }
+    Alliance:make_alliance_overlay_button(player);
+    TeamChat:make_team_chat_button(player);
+    PrintToAllPlayers({ 'teams.player-msg-team-join', player.name, forceData.title })
+end
+
+function couldJoinIntoForce(forceName)
+    if mConfig.teamBalance.enabled == false then
+        return true;
+    end
+
+    local check = {}
+    local lastValue = 0;
+    local onlyOne = false;
+    table.each(global.forcesData, function(data)
+        local c = 0;
+        table.each(game.players, function(p)
+            if data.cName == p.force.name then c = c + 1 end
+        end)
+        check[data.cName] = c;
+        if lastValue == c then -- check if all teams have the same amount of players
+            onlyOne = true;
+        else
+            onlyOne = false;
+        end
+        lastValue = c
+    end)
+    if onlyOne == true then -- if all teams have the same amount of players, then it is possible to join this team
+        return true;
+    end
+    for k,v in spairs(check) do
+        return check[forceName] < v -- only join, if wanted force has fewer amount of players as the largest team
+    end
+
+    return true;
+end
+
 local teamsEnablingStarted = false
 
 function lobby_tick(event)
@@ -309,22 +357,29 @@ script.on_event(defines.events.on_gui_click, function(event)
             end)
             player.print({ 'teams.player-msg-team-number', data.title, c })
         end)
+    elseif eventName == 'autoAssign' then
+        local check = {}
+        table.each(global.forcesData, function(data)
+            local c = 0;
+            table.each(game.players, function(p)
+                if data.cName == p.force.name then c = c + 1 end
+            end)
+            check[data.cName] = c;
+        end)
+        for k,v in spairs(check, function (t,a,b) return t[a] < t[b] end) do
+            local player = game.players[event.player_index]
+            putPlayerInTeam(player, global.forcesData[k]);
+            break
+        end
     elseif string.match(eventName, 'choose_team_.*') ~= nil then
         table.each(global.forcesData, function(data)
             if eventName == 'choose_team_' .. data.name then
                 local player = game.players[event.player_index]
-                player.teleport(game.forces[data.cName].get_spawn_position(s), s)
-                player.color = data.color
-                player.force = game.forces[data.cName]
-                player.gui.left.choose_team.destroy()
-                player.insert { name = "iron-plate", count = 8 }
-                player.insert { name = "pistol", count = 1 }
-                player.insert { name = "firearm-magazine", count = 10 }
-                player.insert { name = "burner-mining-drill", count = 1 }
-                player.insert { name = "stone-furnace", count = 1 }
-                Alliance:make_alliance_overlay_button(player);
-                TeamChat:make_team_chat_button(player);
-                PrintToAllPlayers({ 'teams.player-msg-team-join', player.name, data.title })
+                if couldJoinIntoForce(data.cName) then
+                    putPlayerInTeam(player, data);
+                else
+                    player.print( { 'teams.player-msg-could-not-join', data.title } )
+                end
             end
         end)
     elseif eventName == 'alliance_button' then

@@ -43,6 +43,9 @@ return {
         after = 30 * SECONDS, -- teams are eneabled after XX Seconds
         messageInterval = 10 * SECONDS -- message interval /(when are the teams unlocked)
     },
+    teamBalance = {
+        enabled = true, -- wether team balance should be enabled or not
+    },
     teamMessageGui = {
         enabled = true
     },

@@ -149,7 +149,8 @@ ConfigurationGui.steps = {
                 "attackMessage",
                 "researchMessage",
                 "teamMessageGui",
-                "allianceGui"
+                "allianceGui",
+                "teamBalance"
             },
                 function(name)
                     ConfigurationGui:createCheckboxFlow(frame, name, { 'enable-gui.label-' .. name }, global.mConfig[name].enabled)
@@ -161,7 +162,8 @@ ConfigurationGui.steps = {
                 "attackMessage",
                 "researchMessage",
                 "teamMessageGui",
-                "allianceGui"
+                "allianceGui",
+                "teamBalance"
             },
                 function(name)
                     global.mConfig[name].enabled = player.gui.center.enable_gui[name].checkbox.state -- TODO CHECK IF THIS WORKS
