@@ -9,7 +9,7 @@ function registerTeamChat()
             f.add{type="button", name="team_chat_message_close", caption ={"teams.team-chat-close"}}
         end
     end
-    Gui.on_click('team_chat_button', function(event)
+    MMGui.on_click('team_chat_button', function(event)
         local player = game.players[event.player_index];
         make_team_chat_gui(player);
     end).on_click('team_chat_message_send', function(event)

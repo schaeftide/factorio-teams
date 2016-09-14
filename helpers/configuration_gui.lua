@@ -209,86 +209,86 @@ ConfigurationGui.steps = {
 }
 
 function ConfigurationGui:registerClick()
-    MMGui.on_click('next_step', function(event)
-        local p = game.players[event.player_index];
-        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].saveStep, p);
-        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].destroyStep, p);
-        ConfigurationGui.currentStep = ConfigurationGui.steps[ConfigurationGui.currentStep].nextStep;
-        local g = ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].createStep, p);
-        ConfigurationGui:createNextAndPrev(g);
-    end)
-    MMGui.on_click('prev_step', function(event)
-        local p = game.players[event.player_index];
-        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].saveStep, p);
-        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].destroyStep, p);
-        ConfigurationGui.currentStep = ConfigurationGui.steps[ConfigurationGui.currentStep].prevStep;
-        local g = ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].createStep, p);
-        ConfigurationGui:createNextAndPrev(g);
-    end)
-    MMGui.on_click('start_game', function(event)
-        local p = game.players[event.player_index];
-        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].saveStep, p);
-        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].destroyStep, p);
-        PrintToAllPlayers({ "teams.lobby-msg-config-finished", game.players[1].name })
-        make_forces()
-        setConfigWritten();
-    end)
-    MMGui.on_click('force_cancel', function(event)
-        local p = game.players[event.player_index];
-        if p.gui.center.create_force ~= nil and p.gui.center.create_force.valid then
-            p.gui.center.create_force.destroy();
-        end
-        ConfigurationGui:createNextAndPrev(ConfigurationGui.steps.teams.createFrame(p));
-    end)
-
-    MMGui.on_click('force_save', function(event)
-        local p = game.players[event.player_index];
-        if p.gui.center.create_force ~= nil and p.gui.center.create_force.valid then
-            if p.gui.center.create_force.caption ~= nil then
-                global.forcesData[p.gui.center.create_force.caption] = nil;
-            end
-            local forceData = ConfigurationGui.steps.teams.getForceData(p.gui.center.create_force);
-            if forceData.cName ~= '' then
-                global.forcesData[forceData.cName] = forceData;
-                p.gui.center.create_force.destroy();
-            end
-        end
-        ConfigurationGui:createNextAndPrev(ConfigurationGui.steps.teams.createFrame(p));
-    end)
-
-    MMGui.on_click('force_edit_(.*)', function(event)
-        local element = event.element;
-        local p = game.players[event.player_index];
-        table.each(global.forcesData, function(forceData)
-            if element.valid and element.name == 'force_edit_' .. forceData.name then
-                if p.gui.center.teams_gui ~= nil then
-                    p.gui.center.teams_gui.destroy();
-                end
-                ConfigurationGui.steps.teams.createForceGuiWithData(p, forceData);
-                return;
-            end
-        end)
-    end)
-
-    MMGui.on_click('force_remove', function(event)
-        local element = event.element;
-        local p = game.players[event.player_index];
-        local parent = element.parent;
-        table.each(global.forcesData, function(forceData, k)
-            if parent.name == 'force_frame_' .. forceData.name then
-                global.forcesData[k] = nil;
-            end
-        end)
-        ConfigurationGui:createNextAndPrev(ConfigurationGui.steps.teams.createFrame(p));
-    end)
-
-    MMGui.on_click('force_new', function(event)
-        local p = game.players[event.player_index];
-        if p.gui.center.teams_gui ~= nil then
-            p.gui.center.teams_gui.destroy();
-        end
-        ConfigurationGui.steps.teams.createForceGui(p);
-    end)
+--    MMGui.on_click('next_step', function(event)
+--        local p = game.players[event.player_index];
+--        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].saveStep, p);
+--        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].destroyStep, p);
+--        ConfigurationGui.currentStep = ConfigurationGui.steps[ConfigurationGui.currentStep].nextStep;
+--        local g = ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].createStep, p);
+--        ConfigurationGui:createNextAndPrev(g);
+--    end)
+--    MMGui.on_click('prev_step', function(event)
+--        local p = game.players[event.player_index];
+--        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].saveStep, p);
+--        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].destroyStep, p);
+--        ConfigurationGui.currentStep = ConfigurationGui.steps[ConfigurationGui.currentStep].prevStep;
+--        local g = ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].createStep, p);
+--        ConfigurationGui:createNextAndPrev(g);
+--    end)
+--    MMGui.on_click('start_game', function(event)
+--        local p = game.players[event.player_index];
+--        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].saveStep, p);
+--        ConfigurationGui:try(ConfigurationGui.steps[ConfigurationGui.currentStep].destroyStep, p);
+--        PrintToAllPlayers({ "teams.lobby-msg-config-finished", game.players[1].name })
+--        make_forces()
+--        setConfigWritten();
+--    end)
+--    MMGui.on_click('force_cancel', function(event)
+--        local p = game.players[event.player_index];
+--        if p.gui.center.create_force ~= nil and p.gui.center.create_force.valid then
+--            p.gui.center.create_force.destroy();
+--        end
+--        ConfigurationGui:createNextAndPrev(ConfigurationGui.steps.teams.createFrame(p));
+--    end)
+--
+--    MMGui.on_click('force_save', function(event)
+--        local p = game.players[event.player_index];
+--        if p.gui.center.create_force ~= nil and p.gui.center.create_force.valid then
+--            if p.gui.center.create_force.caption ~= nil then
+--                global.forcesData[p.gui.center.create_force.caption] = nil;
+--            end
+--            local forceData = ConfigurationGui.steps.teams.getForceData(p.gui.center.create_force);
+--            if forceData.cName ~= '' then
+--                global.forcesData[forceData.cName] = forceData;
+--                p.gui.center.create_force.destroy();
+--            end
+--        end
+--        ConfigurationGui:createNextAndPrev(ConfigurationGui.steps.teams.createFrame(p));
+--    end)
+--
+--    MMGui.on_click('force_edit_(.*)', function(event)
+--        local element = event.element;
+--        local p = game.players[event.player_index];
+--        table.each(global.forcesData, function(forceData)
+--            if element.valid and element.name == 'force_edit_' .. forceData.name then
+--                if p.gui.center.teams_gui ~= nil then
+--                    p.gui.center.teams_gui.destroy();
+--                end
+--                ConfigurationGui.steps.teams.createForceGuiWithData(p, forceData);
+--                return;
+--            end
+--        end)
+--    end)
+--
+--    MMGui.on_click('force_remove', function(event)
+--        local element = event.element;
+--        local p = game.players[event.player_index];
+--        local parent = element.parent;
+--        table.each(global.forcesData, function(forceData, k)
+--            if parent.name == 'force_frame_' .. forceData.name then
+--                global.forcesData[k] = nil;
+--            end
+--        end)
+--        ConfigurationGui:createNextAndPrev(ConfigurationGui.steps.teams.createFrame(p));
+--    end)
+--
+--    MMGui.on_click('force_new', function(event)
+--        local p = game.players[event.player_index];
+--        if p.gui.center.teams_gui ~= nil then
+--            p.gui.center.teams_gui.destroy();
+--        end
+--        ConfigurationGui.steps.teams.createForceGui(p);
+--    end)
 end
 
 function ConfigurationGui:createNextAndPrev(gui)

@@ -2,7 +2,7 @@
 function registerChooseTeam()
     local s = game.surfaces.nauvis;
     table.each(global.forcesData, function(data)
-        Gui.on_click('choose_team_' .. data.name,
+        MMGui.on_click('choose_team_' .. data.name,
             function(event)
                 local player = game.players[event.player_index]
                 player.teleport(game.forces[data.cName].get_spawn_position(s), s)
@@ -20,7 +20,7 @@ function registerChooseTeam()
             end);
     end);
 
-    Gui.on_click('team_number_check',function(event)
+    MMGui.on_click('team_number_check',function(event)
         local player = game.players[event.player_index]
         table.each(global.forcesData, function(data)
             local c = 0;

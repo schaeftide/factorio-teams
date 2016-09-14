@@ -1,10 +1,10 @@
 {
   "name": "Teams",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "title": "easy Teams",
   "author": "KaleR",
   "contact": "mail@schaefti.de",
   "homepage": "https://forums.factorio.com/viewtopic.php?f=92&t=29465",
-  "factorio_version": "0.13",
+  "factorio_version": "0.14",
   "description": "Create easily Teams on the fly and challenge each other. You could configure every thing on startup"
 }

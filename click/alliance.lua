@@ -137,7 +137,7 @@ function registerAllianceClick()
         end)
     end
 
-    Gui.on_click('alliance_button', function(event)
+    MMGui.on_click('alliance_button', function(event)
         local player = game.players[event.player_index]
         buildAllianceGui(player)
     end).on_click('alliance_close', function(event)
